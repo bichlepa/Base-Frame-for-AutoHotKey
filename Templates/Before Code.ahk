@@ -2,17 +2,17 @@
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 BaseFrame_AppVersion:=_AppVersion_
-BaseFrame_AppVersionToCompare:=_AppVersionToCompare_
+BaseFrame_AppVersionToCompare:=_AppVersionForComparison_
 
-
+BaseFrameAboutText=
+(
+_BASEFRAMEABOUTTEXT_
+)
 goto,JumpOverBaseFrame_About ;Do not show the license terms
 
 BaseFrame_About:
 
-BaseFrameAboutText=
-(
-	_BASEFRAMEABOUTTEXT_
-)
+
 ;Todo: make GUI multilingual
 
 Gui, BaseFrame:destroy

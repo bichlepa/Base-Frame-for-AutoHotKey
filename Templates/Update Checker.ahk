@@ -46,7 +46,7 @@ if modus!=silent ;If not silent check all URLs
 		
 		
 		;Read txt file. If file is broken, the variables will contain "error"
-		iniread,TempAvailableVersion,%A_WorkingDir%\Online version.txt,Update Info,Version,error 
+		iniread,TempAvailableVersion,%A_WorkingDir%\Online version.txt,Update Info,Version,0 
 		iniread,TempAppUpdateExe,%A_WorkingDir%\Online version.txt,Update Info,Download Path,error
 		iniread,TempOpenWebsite,%A_WorkingDir%\Online version.txt,Update Info,Open Site,error
 		;~ msgbox,%TempGreatestAvailableVersion%,%AppUpdateExe%

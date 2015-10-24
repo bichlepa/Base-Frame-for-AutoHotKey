@@ -81,9 +81,9 @@ stringreplace,Code_MainScript,Code_MainScript,_BASEFRAMEABOUTTEXT_,%LicenseShort
 stringreplace,Code_MainScript,Code_MainScript,_AppAuthorName_,%AppAuthorName%,a
 stringreplace,Code_MainScript,Code_MainScript,_AppAuthorEmail_,%AppAuthorEmail%,a
 stringreplace,Code_MainScript,Code_MainScript,_AppNameLong_,%AppNameLong%,a
-stringreplace,Code_MainScript,Code_MainScript,_AppVersionToCompare_,%AppVersionForComparison%,a
+stringreplace,Code_MainScript,Code_MainScript,_AppVersionForComparison_,%AppVersionForComparison%,a
 stringreplace,Code_MainScript,Code_MainScript,_AppVersion_,%AppVersion%,a
-
+;~ MsgBox %Code_MainScript%
 
 ;Now also add the normal code
 Code_MainScript=
