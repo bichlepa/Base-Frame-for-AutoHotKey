@@ -1,30 +1,29 @@
 ﻿ui_CreateMainGUI()
 {
 	global
+    gui 1:default
 	Gui, Add, Text, x10 y10,% lang("Sourcecode") ":"
 	Gui, Add, Edit, x10 y30 w180 vSource ReadOnly,
 	Gui, Add, Button, x195 y25 h30 w50 gOpenFile +default, % lang("Open")
-	Gui, Add, Text, x10 y60, % lang("Application name")
-	Gui, Add, Edit, x10 y80 w180 vAppName
-	Gui, Add, GroupBox, x10 y110 w230 h283, 
-	Gui, Add, Text, x15 y130, % lang("Abbreviation") ":"
-	Gui, Add, Edit, x105 yp vAppNameShort,
-	Gui, Add, Text, x15 yp+25, % lang("Long name") ":"
-	Gui, Add, Edit, x105 yp vAppNameLong,
+	Gui, Add, Text, x10 y60, % lang("Application name") ":"
+	Gui, Add, Edit, x10 y80 w180 vAppName,
+	Gui, Add, GroupBox, x10 y110 w230 h213,  % lang("Important values")
 	Gui, Add, Text, x15 yp+25, % lang("Installation folder") ":"
-	Gui, Add, Edit, x105 yp vAppFolder,
+	Gui, Add, Edit, x115 yp vAppStdInstal,
+	Gui, Add, Text, x15 yp+25, % lang("Start menu folder") ":"
+	Gui, Add, Edit, x115 yp vAppStartMenu,
+	Gui, Add, Text, x15 yp+25, % lang("Application ID") ":"
+	Gui, Add, Edit, x115 yp vAppID,
 	Gui, Add, Text, x15 yp+30, % lang("Author") ":"
-	Gui, Add, Edit, x105 yp vAppAuthorName,
+	Gui, Add, Edit, x115 yp vAppAuthorName,
 	Gui, Add, Text, x15 yp+25, % lang("Email") ":"
-	Gui, Add, Edit, x105 yp vAppAuthorEmail,
+	Gui, Add, Edit, x115 yp vAppAuthorEmail,
 	Gui, Add, Text, x15 yp+30,% lang("Application version") ":"
-	Gui, Add, Edit, x105 yp vAppVersion,
+	Gui, Add, Edit, x115 yp vAppVersion,
 	Gui, Add, Text, x15 yp+25, % lang("Update Version") ":"
-	Gui, Add, Edit, x105 yp vAppVersionForComparison,
-	Gui, Add, Text, x15 yp+25, % lang("Update URL") ":"
-	Gui, Add, Edit, x105 yp vAppURLVersionComparison,
-	Gui, Add, Button, x55 yp+35 w100 h30 vButtonAdvancedInformations gButtonAdvancedInformations , % lang("Advanced")
-	Gui, Add, Text, x260 y10, % lang("Associated files") ":"
+	Gui, Add, Edit, x115 yp vAppUpdateVersion,
+	Gui, Add, Button, x35 yp+45 w180 h30 vButtonAdvancedInformations gButtonAdvancedInformations disabled, % lang("Advanced")
+	Gui, Add, Text, x260 y10, % lang("Included files") ":"
 	Gui, Add, Button, x260 y30 w65 vAddFileB gAddFile Disabled,% "+ " lang("Files") ":"
 	Gui, Add, Button, X+5 y30 w70 vAddDirB gAddDir Disabled,% "+ " lang("Folders")
 	Gui, Add, Button, X+5 y30 w70 vAddExeB gAddExe Disabled, % "+ " lang("Exe")
@@ -35,9 +34,8 @@
 	Gui, Add, Progress, x250 y0 w1 h395 c000000, 100 ;Vertikal separator
 	Gui, Add, Progress, x0 y395 w520 h1 c000000, 100 ;Horizontal Separator
 	Gui, Add, Progress, x0 y0 w520 h1 c000000, 100 ;Separator of menu
-	Gui, Add, Button, x10 y400 h30 vButtonGenerateExe gGenerate ,% lang("Generate installation file")
-	Gui, Add, Checkbox, x160 yp+8 vCheckboxKeepRemainingFiles, % lang("Keep temporary files")
-	GuiControl, Disable, ButtonGenerateExe
+	Gui, Add, Button, x10 y400 h30 w200 vButtonGenerateExe gGenerate disabled,% lang("Generate installation file")
+	Gui, Add, Checkbox, X+5 yp+8 vCheckboxKeepRemainingFiles, % lang("Keep temporary files")
 	Gui, Add, Button, x430 yp-8 w80 h30 gGuiClose, % lang("Close")
 	Gui, Show,w520 , % lang("Base Frame") " v" BaseFrame_AppVersion
 	
@@ -74,7 +72,7 @@ if AppFileName
 }
 
 ;Choose file:
-FileSelectFile, File, 3, ::{20d04fe0-3aea-1069-a2d8-08002b30309d}, % lang("Select sourcecode"), % lang("AutoHotKey scripts") " (*.ahk)"
+FileSelectFile, File, % 3+32, ::{20d04fe0-3aea-1069-a2d8-08002b30309d}, % lang("Select sourcecode"), % lang("AutoHotKey scripts") " (*.ahk)"
 ;If user aborts:
 If (File = "")
    Return
@@ -106,63 +104,166 @@ If (App_Direction != App_Drive) {
    GuiControl,, Source, %File%
 }
 
-;Try to load already existing settings
-iniread,AppName,%App_Direction%\Settings.ini,BaseFrame,Appname,%a_space%
-iniread,AppNameShort,%App_Direction%\Settings.ini,BaseFrame,AppNameShort,%a_space%
-iniread,AppNameLong,%App_Direction%\Settings.ini,BaseFrame,AppNameLong,%a_space%
-iniread,AppFolder,%App_Direction%\Settings.ini,BaseFrame,AppOrdner,%a_space%
-iniread,AppAuthorName,%App_Direction%\Settings.ini,BaseFrame,AppAuthorName,%a_space%
-iniread,AppAuthorEmail,%App_Direction%\Settings.ini,BaseFrame,AppAuthorEmail,%a_space%
-iniread,AppVersion,%App_Direction%\Settings.ini,BaseFrame,AppVersion,%a_space%
-iniread,AppVersionForComparison,%App_Direction%\Settings.ini,BaseFrame,AppGenaueVersion,%a_space%
-iniread,AppURLVersionComparison,%App_Direction%\Settings.ini,BaseFrame,AppUrlTxtVersion,%a_space%
-iniread,AppURLVersionComparison2,%App_Direction%\Settings.ini,BaseFrame,AppUrlTxtVersion2,%a_space%
-iniread,AppURLVersionComparison3,%App_Direction%\Settings.ini,BaseFrame,AppUrlTxtVersion3,%a_space%
-iniread,AppChangeLog,%App_Direction%\Settings.ini,BaseFrame,AppChangelog,%a_space%
+if not ( fileexist(App_Direction "\AppInfo.ini") or fileexist(App_Direction "\Settings.ini"))
+{
 
-iniread,AppDirList,%App_Direction%\Settings.ini,BaseFrame,AppDirList,%a_space%
-iniread,AppFileList,%App_Direction%\Settings.ini,BaseFrame,AppFileList,%a_space%
-iniread,AppExeList,%App_Direction%\Settings.ini,BaseFrame,AppExeList,%a_space%
-iniread,AppIconList,%App_Direction%\Settings.ini,BaseFrame,AppIconList,%a_space%
+   ui_SetInitialSettings()
+   return
+}
+else
+{
+   if not fileexist(App_Direction "\AppInfo.ini")
+   { 
+      ;Keep compability to old version of Base Frame
+      tempInifile=Settings.ini
+      tempIniSection=BaseFrame
+      
+   }
+   else
+   {
+      tempInifile=AppInfo.ini
+      tempIniSection=AppInfo
+   }
+   
+   ;Try to load already existing settings
+   iniread,AppName,%App_Direction%\%tempInifile%,%tempIniSection%,Appname,%a_space%
+   iniread,AppStdInstal,%App_Direction%\%tempInifile%,%tempIniSection%,AppStdInstal,%a_space%
+   iniread,AppStartMenu,%App_Direction%\%tempInifile%,%tempIniSection%,AppStartMenu,%a_space%
+   iniread,AppID,%App_Direction%\%tempInifile%,%tempIniSection%,AppID,%a_space%
+   if (AppStdInstal="" or AppStartMenu="" or AppID="") ;Keep compability to old version of Base Frame
+   {
+      iniread,AppFolder,%App_Direction%\%tempInifile%,%tempIniSection%,AppOrdner,%a_space%
+      if (AppStdInstal="")
+         AppStdInstal:=AppFolder
+      if (AppStartMenu="")
+         AppStartMenu:=AppFolder
+      if (AppID="")
+         AppID:=AppFolder
+   }
+   iniread,AppAuthorName,%App_Direction%\%tempInifile%,%tempIniSection%,AppAuthorName,%a_space%
+   iniread,AppAuthorEmail,%App_Direction%\%tempInifile%,%tempIniSection%,AppAuthorEmail,%a_space%
+   iniread,AppVersion,%App_Direction%\%tempInifile%,%tempIniSection%,AppVersion,%a_space%
+   iniread,AppUpdateVersion,%App_Direction%\%tempInifile%,%tempIniSection%,AppUpdateVersion,%a_space%
+   if (AppUpdateVersion="") ;Keep compability to old version of Base Frame
+   {
+      iniread,AppUpdateVersion,%App_Direction%\%tempInifile%,%tempIniSection%,AppGenaueVersion,%a_space%
+   }
+   
+   iniread,AppIncludeUpdater,%App_Direction%\%tempInifile%,%tempIniSection%,AppIncludeUpdater,%a_space%
+   iniread,AppOptionCheckForUpdatesOnStartup,%App_Direction%\%tempInifile%,%tempIniSection%,AppOptionCheckForUpdatesOnStartup,%a_space%
+   iniread,AppURLVersionComparison,%App_Direction%\%tempInifile%,%tempIniSection%,AppUrlTxtVersion,%a_space%
+   iniread,AppURLVersionComparison2,%App_Direction%\%tempInifile%,%tempIniSection%,AppUrlTxtVersion2,%a_space%
+   iniread,AppURLVersionComparison3,%App_Direction%\%tempInifile%,%tempIniSection%,AppUrlTxtVersion3,%a_space%
+   iniread,AppAutomaticUpdateIniFile,%App_Direction%\%tempInifile%,%tempIniSection%,AppAutomaticUpdateIniFile,%a_space%
+   iniread,AppAutomaticUpdateIniSection,%App_Direction%\%tempInifile%,%tempIniSection%,AppAutomaticUpdateIniSection,%a_space%
+   iniread,AppAutomaticUpdateIniKey,%App_Direction%\%tempInifile%,%tempIniSection%,AppAutomaticUpdateIniKey,%a_space%
+   iniread,AppCreateIniWithUpdateInformations,%App_Direction%\%tempInifile%,%tempIniSection%,AppCreateIniWithUpdateInformations,%a_space%
+   iniread,AppPathOfIniWithUpdateInformations,%App_Direction%\%tempInifile%,%tempIniSection%,AppPathOfIniWithUpdateInformations,%a_space%
+   iniread,AppURLInstaller,%App_Direction%\%tempInifile%,%tempIniSection%,AppURLInstaller,%a_space%
+   iniread,AppWebsite,%App_Direction%\%tempInifile%,%tempIniSection%,AppWebsite,%a_space%
+   
+   iniread,AppChangelog,%App_Direction%\%tempInifile%,%tempIniSection%,AppChangelog,%a_space%
+   
+   iniread,AppOptionWhichLicense,%App_Direction%\%tempInifile%,%tempIniSection%,AppOptionWhichLicense,%a_space%
+   iniread,AppCustomLicensePath,%App_Direction%\%tempInifile%,%tempIniSection%,AppCustomLicensePath,%a_space%
+   iniread,AppLicense,%App_Direction%\%tempInifile%,%tempIniSection%,AppLicense,%a_space%
+   
+   iniread,AppLanguage,%App_Direction%\%tempInifile%,%tempIniSection%,AppLanguage,%a_space%
+   iniread,AppPortability,%App_Direction%\%tempInifile%,%tempIniSection%,AppPortability,%a_space%
+   AppPortability++
+   
+   iniread,AppDirList,%App_Direction%\%tempInifile%,%tempIniSection%,AppDirList,%a_space%
+   iniread,AppFileList,%App_Direction%\%tempInifile%,%tempIniSection%,AppFileList,%a_space%
+   iniread,AppExeList,%App_Direction%\%tempInifile%,%tempIniSection%,AppExeList,%a_space%
+   iniread,AppIconList,%App_Direction%\%tempInifile%,%tempIniSection%,AppIconList,%a_space%
 
-;If the settings are empty, assign some default values
+
+}
+
+ShowLoadedSettingsInGUI: ;Label is used if the initial settings was opened, because the application was selected the first time
+
+;If some settings are empty, assign default values
 if not AppAuthorName
-	AppAuthorName:=A_UserName
+{
+   IniRead,AppAuthorName,Settings.ini,DefaultValues,AppAuthorName,%a_space%
+   if not AppAuthorName
+      AppAuthorName:=A_UserName
+}
 
-if not AppFileName
-	AppFileName:=App_FilenameNoExt
+if not AppAuthorEmail
+{
+   IniRead,AppAuthorEmail,Settings.ini,DefaultValues,AppAuthorEmail,%a_space%
+}
 
 if not AppName
-	AppName:=App_FilenameNoExt
-	
+   AppName:=App_FilenameNoExt
+
+if not AppFileName
+   AppFileName:=AppName
+
+if not AppStdInstal
+   AppStdInstal:=AppName
+if not AppStartMenu
+   AppStartMenu:=AppName
+if not AppID
+   AppID:=AppName
+
 if not AppVersion
-	AppVersion=1.0	
+   AppVersion=1.0	
 
-if not AppVersionForComparison
-	AppVersionForComparison=1.00.00
+if not AppUpdateVersion
+   AppUpdateVersion=1.00.00
+   
+if not AppAutomaticUpdateIniFile
+   AppAutomaticUpdateIniFile=settings.ini
+if not AppAutomaticUpdateIniSection
+   AppAutomaticUpdateIniSection=BaseFrame
+if not AppAutomaticUpdateIniKey
+   AppAutomaticUpdateIniKey=Check for updates
 
+if not AppLicense
+   AppLicense=gnu_gpl
+if not AppLanguage
+   AppLanguage:=UIlang
+
+if AppIncludeUpdater=
+   AppIncludeUpdater:=false
+if AppCreateIniWithUpdateInformations=
+   AppCreateIniWithUpdateInformations:=false
+if not AppOptionCheckForUpdatesOnStartup
+   AppOptionCheckForUpdatesOnStartup:=1
+if AppOptionWhichLicense=
+   AppOptionWhichLicense:=1
+if AppPortability=
+   AppPortability:=1
 
 ;Show loaded settings in gui
 GuiControl,,AppName,%AppName%
-GuiControl,,AppNameShort,%AppNameShort%
-GuiControl,,AppNameLong,%AppNameLong%
-GuiControl,,AppFolder,%AppFolder%
+GuiControl,,AppStdInstal,%AppStdInstal%
+GuiControl,,AppStartMenu,%AppStartMenu%
+GuiControl,,AppID,%AppID%
 GuiControl,,AppAuthorName,%AppAuthorName%
 GuiControl,,AppAuthorEmail,%AppAuthorEmail%
 GuiControl,,AppVersion,%AppVersion%
-GuiControl,,AppVersionForComparison,%AppVersionForComparison%
+GuiControl,,AppUpdateVersion,%AppUpdateVersion%
 GuiControl,,AppURLVersionComparison,%AppURLVersionComparison%
 
-
+guicontrol,enable,ButtonAdvancedInformations
 
 
 ;If the exe list is empty, add the three Base Frame Exes
 if not AppExeList
-	AppExeList=|%AppFileName%|Update Checker|
+{
+   if AppIncludeUpdater
+      AppExeList=|%AppFileName%|Update Checker|
+   else
+       AppExeList=|%AppFileName%|
+}
    
 gosub,GuiListUpdate
 
-
+;Run the Subroutine "Check" every 100ms:
+SetTimer, Check, 100
 
 
 
@@ -221,10 +322,7 @@ Loop %count%
          MsgBox, 64, % lang("Information"), % lang("The file %1% could not be added because it is the sourcecode script",NewFile)
       continue
    }
-   If (NewFile = "License.txt") {
-         MsgBox, 64, % lang("Information"), % lang("The file %1% could not be added because it is the Default Licence file of the installer",NewFile)
-      continue
-   }
+
    ;Add file to %AppFileList%
    ;If %AppFileList% is empty, save file as first entry, otherwise append
    If (AppFileList = "")
@@ -419,11 +517,11 @@ return
 
 GuiListUpdate:
 ;Show content of %AppDirList% and %AppFileList% in the list
-insert1 := (AppDirList = "") ? "|<Keine>|" : AppDirList
-insert2 := (AppFileList = "") ? "|<Keine>|" : AppFileList
-insert3 := (AppExeList = "") ? "|<Keine>|" : AppExeList
+insert1 := (AppDirList = "") ? "|<" lang("none") ">|" : AppDirList
+insert2 := (AppFileList = "") ? "|<" lang("none") ">|" : AppFileList
+insert3 := (AppExeList = "") ? "|<" lang("none") ">|" : AppExeList
 GuiControl,, List, |
-GuiControl,, List, --- %_Ordners_%: ---%insert1%%A_Tab%|--- %_Dateien_%: ---%insert2%%A_Tab%|--- %_Skripte_kompilieren_%: ---%insert3%|
+GuiControl,, List,% "--- " lang("Folders") ": ---" insert1 A_Tab "|--- " lang("Files") ": ---" insert2 a_tab "|--- " lang("Compile scripts") ": ---" insert3
 Return
 
 
@@ -586,8 +684,8 @@ else
 }
 
 
-;The "Generate installation file" Bitton will only be activated if all needed fields are filled:
-If not (Source = "" or AppName = "" or AppNameShort = "" or AppNameLong = "" or AppFolder = "" or AppAuthorName = "" or AppAuthorEmail = "" or AppVersion = "" or AppVersionForComparison = "" or AppURLVersionComparison = "")
+;The "Generate installation file" Button will only be activated if all needed fields are filled:
+If not (Source = "" or AppName = "" or AppStdInstal = "" or AppStartMenu = "" or AppID = "" or AppVersion = "" or AppUpdateVersion = "" or (AppURLVersionComparison = "" and AppIncludeUpdater = 1))
    GuiControl, Enable, ButtonGenerateExe
 else
    GuiControl, Disable, ButtonGenerateExe

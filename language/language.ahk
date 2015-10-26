@@ -10,7 +10,6 @@ lang_FindAllLanguages()
 		StringReplace,filenameNoExt,A_LoopFileName,.%A_LoopFileExt%
 		
 		IniRead,%filenameNoExt%enlangname,language\%filenameNoExt%.ini,general,enname
-		;MsgBox % filenameNoExt "-" %filenameNoExt%enlangname
 		IniRead,%filenameNoExt%langname,language\%filenameNoExt%.ini,general,name
 		IniRead,%filenameNoExt%code,language\%filenameNoExt%.ini,general,code
 		if %filenameNoExt%enlangname!=Error
@@ -23,18 +22,14 @@ lang_FindAllLanguages()
 		;MsgBox %  filenameNoExt "|" %filenameNoExt%langname
 	}
 
-
+	lang_LoadCurrentLanguage()
+	
 	
 }
 
-
-;Load language settings
-lang_LoadSettings()
+lang_LoadCurrentLanguage()
 {
 	global
-	iniread,translationto,settings.ini,common,translatingto
-	iniread,developing,settings.ini,common,developing
-	
 	iniread,UILang,settings.ini,common,UILanguage
 	if uilang=error
 	{
@@ -51,85 +46,67 @@ lang_LoadSettings()
 		if uilang=Error
 			uilang=en
 	}
-	;IniRead,%UILang%enlangname,language\%UILang%.ini\general\enname
-	;IniRead,%UILang%langname,language\%UILang%.ini\general\name
-	
+	IniRead,%UILang%enlangname,language\%UILang%.ini,general,enname
+	IniRead,%UILang%langname,language\%UILang%.ini,general,name
+	lang_ReadAllTranslations()
 }
 
-lang_SetNewLanguage(newlang)
-{
-	global
-	
-	local tempkey
-	local tempvalue
-	
-	;The newLang may be a number
-	if newlang is number
-	{
-		iniwrite,% allLangs[newlang],settings.ini,common,UILanguage
-		
-	}
-	else
-	{
-		;newlang may be abbreviation of the language
-		for tempkey, tempvalue in allLangs
-		{
-			if (tempvalue=newlang)
-			{
-				iniwrite,% allLangs[tempkey],settings.ini,common,UILanguage
-				break
-			}
-			
-		}
-		;newlang may be the English name of the language
-		for tempkey, tempvalue in allLangs
-		{
-			if (%tempvalue%enlangname=newlang)
-			{
-				iniwrite,% allLangs[tempkey],settings.ini,common,UILanguage
-				break
-			}
-			
-		}
-		;newlang may be the native name of the language
-		for tempkey, tempvalue in allLangs
-		{
-			if (%tempvalue%langname=newlang)
-			{
-				iniwrite,% allLangs[tempkey],settings.ini,common,UILanguage
-				break
-			}
-			
-		}
-		
-	}
-	
-}
-
-
-;Translate. This function will be called very often
+;translate one string
 lang(langvar,$1="",$2="",$3="",$4="",$5="",$6="",$7="",$8="",$9="")
 {
 	global UILang
 	global developing
 	global translationto
+	global LangNoUseCache
 	static guiCreated
 	global allLangs
 	
+	global langAllTranslations
+	
 	if (langvar ="")
 		return ""
+	if not isobject(langAllTranslations)
+		langAllTranslations:=Object()
+	
 	langaborted:=false
 	StringReplace,langvar_no_spaces,langvar,%a_space%,_,all
 	
 	langBeginAgain:
-	IniRead,initext,language\%UILang%.ini,translations,%langvar_no_spaces%
-	if (initext="" or initext=="ERROR")
+	;look whether the string is in cache
+	if ((!(LangNoUseCache)) and (langAllTranslations.haskey(langvar_no_spaces)))
+	{
+		;~ MsgBox %langvar_no_spaces%
+		initext:=langAllTranslations[langvar_no_spaces]
+		UsedCache:=true
+	}
+	else ;if not in cache or cache should not be used, read from ini
+	{
+		IniRead,iniAllSections,language\%UILang%.ini
+		Loop,parse,iniAllSections,`n
+		{
+			IniRead,initext,language\%UILang%.ini,%a_loopfield%,%langvar_no_spaces%,%A_Space%
+			if initext
+				break
+		}
+		
+		UsedCache:=false
+		;~ MsgBox read '%langvar_no_spaces%' from ini
+	}
+	
+	if (initext="")
 	{
 		;iniwrite,% "",language\%UILang%.ini,translations,%langvar_no_spaces%
 		
-		IniRead,initexten,language\en.ini,translations,%langvar_no_spaces%
+		IniRead,iniAllSections,language\en.ini
+		Loop,parse,iniAllSections,`n
+		{
+			IniRead,initexten,language\en.ini,%a_loopfield%,%langvar_no_spaces%,%A_Space%
+			if initexten
+				break
+		}
+		
 		;MsgBox %initexten%, %langvar_no_spaces%
-		if (initexten=="ERROR" or initexten="") 
+		if (initexten="") 
 		{
 			
 			if developing=yes
@@ -144,7 +121,6 @@ lang(langvar,$1="",$2="",$3="",$4="",$5="",$6="",$7="",$8="",$9="")
 				}
 				loop,9
 				{
-					;Replace some misspellings. For example replace %1$ with %1%
 					StringReplace,newtrans,newtrans,$%a_index%,`%1`%,all
 					StringReplace,newtrans,newtrans,$%a_index%,`%1`%,all
 					StringReplace,newtrans,newtrans,$%a_index%$,`%1`%,all
@@ -179,7 +155,7 @@ lang(langvar,$1="",$2="",$3="",$4="",$5="",$6="",$7="",$8="",$9="")
 				loop,9
 				{
 					
-					;Replace some misspellings. For example replace %1$ with %1%
+					
 					StringReplace,newtrans,newtrans,$%a_index%,`%1`%,all
 					StringReplace,newtrans,newtrans,$%a_index%,`%1`%,all
 					StringReplace,newtrans,newtrans,$%a_index%$,`%1`%,all
@@ -203,21 +179,69 @@ lang(langvar,$1="",$2="",$3="",$4="",$5="",$6="",$7="",$8="",$9="")
 			
 		}
 	}
-	
+	else if not UsedCache
+	{
+		langAllTranslations[langvar_no_spaces]:=initext
+	}
 	langSuccess:
-	;replace all placeholders with transmitted parameters
 	StringReplace,initext,initext,`%1`%,%$1%,all
 	StringReplace,initext,initext,`%2`%,%$2%,all
 	StringReplace,initext,initext,`%3`%,%$3%,all
 	StringReplace,initext,initext,`%4`%,%$4%,all
-	StringReplace,initext,initext,`%5`%,%$5%,all
-	StringReplace,initext,initext,`%6`%,%$6%,all
-	StringReplace,initext,initext,`%7`%,%$7%,all
-	StringReplace,initext,initext,`%8`%,%$8%,all
-	StringReplace,initext,initext,`%9`%,%$9%,all
+	StringReplace,initext,initext,`%5`%,%$4%,all
+	StringReplace,initext,initext,`%6`%,%$4%,all
+	StringReplace,initext,initext,`%7`%,%$4%,all
+	StringReplace,initext,initext,`%8`%,%$4%,all
+	StringReplace,initext,initext,`%9`%,%$4%,all
 	
 	
 	return initext
 	
 }
 
+lang_ReadAllTranslations()
+{
+	global UILang
+	global langAllTranslations
+	global langMakeAdditionalCategoryOfTranslationObject
+	
+	
+	langAllTranslations:=Object()
+	if langMakeAdditionalCategoryOfTranslationObject
+		global langCategoryOfTranslation:=object()
+	
+	loop,read,language\%UILang%.ini
+	{
+		
+		ifinstring,a_loopreadline,[
+			ifinstring,a_loopreadline,]
+			{
+				tempCategory:=trim(a_loopreadline) ;Remove spaces (if any)
+				tempCategory:=trim(a_loopreadline,"[]") ;remove brackets
+			}
+		
+		if tempCategory=general
+			continue
+		
+		ifinstring,a_loopreadline,=
+		{
+			;~ MsgBox %a_loopreadline%
+			stringgetpos,pos,a_loopreadline,=
+			stringleft,tempItemName,a_loopreadline,%pos%
+			
+			StringTrimLeft,tempItemContent,a_loopreadline,% (pos +1)
+			
+			langAllTranslations[tempItemName]:=tempItemContent
+			if langMakeAdditionalCategoryOfTranslationObject
+			{
+				langCategoryOfTranslation[tempItemName]:=tempCategory
+				;~ MsgBox % strobj(langCategoryOfTranslation)
+			}
+			
+			
+			
+			
+		}
+		
+	}
+}

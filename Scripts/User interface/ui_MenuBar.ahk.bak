@@ -4,8 +4,8 @@
 	
 	for tempkey, tempval in allLangs
 	{
-	   ;MsgBox % tempval "|" %tempval%enlangname
-	   menu,MenuLanguage,add,% %tempval%enlangname,MenuChangeLanguage
+	    ;~ MsgBox % tempval "|" %tempval%enlangname
+	    menu,MenuLanguage,add,% %tempval%enlangname,MenuChangeLanguage
 	}
 	
 	
@@ -24,13 +24,20 @@
 goto,jumpOverMenuBarLabels
 
 MenuChangeLanguage:
-WhitchLanguage:=A_ThisMenuItem
+WhichLanguage:=A_ThisMenuItem
 MsgBox, 52, % lang("Attention"), % lang("When you change the language, Base Frame needs to be restarted. All settings will be lost")
 ifmsgbox,Yes
 {
-  lang_SetNewLanguage(WhitchLanguage)
-  Reload
-  return
+	for tempkey, tempval in allLangs
+	{
+		if (WhichLanguage = %tempval%enlangname) 
+		{
+			IniWrite,% tempval,settings.ini,common,UILanguage ;Save the languate ID to the settings.ini
+			break
+		}
+	}
+	Reload
+	return
 }
 else
   return
@@ -40,7 +47,7 @@ return
 
 
 MenuHelp:
-
+Gui, Help:Destroy
 IfNotExist, Help\%UILang%\Index.html
 {
    MsgBox, 16, % lang("Error"),% lang("No help file was found")

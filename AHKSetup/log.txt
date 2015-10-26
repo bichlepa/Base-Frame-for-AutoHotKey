@@ -1,0 +1,325 @@
+
+starting...
+Application Info:
+AppName=Base Frame
+AppID=Base Frame
+AppVersion=3 BETA
+AppUpdateVersion=3.00.00
+AppAuthorName=Paul Bichler
+AppAuthorEmailAvailable=1
+AppAuthorEmail=autohotflow@arcor.de
+AppStdInstall=Base Frame
+AppStartMenu=Base Frame
+AppPortability=2
+AppChangelogAvailable=1
+AppChangelog=Changelog.txt
+AppWebsiteAvailable=1
+AppWebsite=http://ahkscript.org/boards/viewtopic.php?f=6&t=6723
+AppUsesFileTypes=0
+creating environment:
+copying files...
+creating AppUninstFiles: 'uninstf175568609'
+creating AppUninstReg: 'uninstr175568609'
+writing instruction file 1/2...
+generating instructions from directory structure of C:\Users\Paul\Documents\GitHub\Base-Frame-for-AutoHotKey\Base Frame temp:
+0: AHKSetup
+1: Help
+2: Icons
+3: language
+4: Licenses
+5: Templates
+6: AHKSetup\lang_packages
+7: AHKSetup\res
+8: Help\en
+generating instructions from files inside C:\Users\Paul\Documents\GitHub\Base-Frame-for-AutoHotKey\Base Frame temp:
+9: AppInfo.ini
+10: Base Frame.exe
+11: Changelog.txt
+12: TODO.odt
+13: Update Checker.exe
+14: AHKSetup\build.exe
+15: AHKSetup\ChangelogForCurrentBuild.txt
+16: AHKSetup\LicenseForCurrentBuild.txt
+17: AHKSetup\log.txt
+18: AHKSetup\setupicon.ico
+19: AHKSetup\setup_template.ahk
+20: AHKSetup\short documentation.pdf
+21: AHKSetup\uninstall_template.ahk
+22: AHKSetup\uninst_start.ahk
+23: AHKSetup\lang_packages\DE.lp
+24: AHKSetup\lang_packages\EN.lp
+25: AHKSetup\res\buttonbg.png
+26: AHKSetup\res\Thumbs.db
+27: Help\en\Index.html
+28: Help\en\Menu.html
+29: Help\en\Menus.html
+30: Help\en\Quick Start.html
+31: Help\en\Welcome.html
+32: Icons\Base Frame.ico
+33: Icons\Translator.ico
+34: Icons\Update Checker.ico
+35: language\de.ini
+36: language\en.ini
+37: language\Translation Tool.exe
+38: Licenses\gnu_gpl_DE.txt
+39: Licenses\gnu_gpl_EN.txt
+40: Templates\Before Code.ahk
+41: Templates\Update Checker.ahk
+42: Uninstall.exe (obligatory)
+writing instruction file 2/2...
+----- instruction output -----
+instr_count := 0
+instr_amount := 44
+Gui,Submit,NoHide
+log("Preparing...")
+log(label11 . "\AHKSetup")
+FileCreateDir, % label11 . "\AHKSetup"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help")
+FileCreateDir, % label11 . "\Help"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Icons")
+FileCreateDir, % label11 . "\Icons"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\language")
+FileCreateDir, % label11 . "\language"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Licenses")
+FileCreateDir, % label11 . "\Licenses"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Templates")
+FileCreateDir, % label11 . "\Templates"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\lang_packages")
+FileCreateDir, % label11 . "\AHKSetup\lang_packages"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\res")
+FileCreateDir, % label11 . "\AHKSetup\res"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en")
+FileCreateDir, % label11 . "\Help\en"
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AppInfo.ini")
+FileInstall,AppInfo.ini, % label11 . "\AppInfo.ini",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Base Frame.exe")
+FileInstall,Base Frame.exe, % label11 . "\Base Frame.exe",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Changelog.txt")
+FileInstall,Changelog.txt, % label11 . "\Changelog.txt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\TODO.odt")
+FileInstall,TODO.odt, % label11 . "\TODO.odt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Update Checker.exe")
+FileInstall,Update Checker.exe, % label11 . "\Update Checker.exe",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\build.exe")
+FileInstall,AHKSetup\build.exe, % label11 . "\AHKSetup\build.exe",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\ChangelogForCurrentBuild.txt")
+FileInstall,AHKSetup\ChangelogForCurrentBuild.txt, % label11 . "\AHKSetup\ChangelogForCurrentBuild.txt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\LicenseForCurrentBuild.txt")
+FileInstall,AHKSetup\LicenseForCurrentBuild.txt, % label11 . "\AHKSetup\LicenseForCurrentBuild.txt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\log.txt")
+FileInstall,AHKSetup\log.txt, % label11 . "\AHKSetup\log.txt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\setupicon.ico")
+FileInstall,AHKSetup\setupicon.ico, % label11 . "\AHKSetup\setupicon.ico",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\setup_template.ahk")
+FileInstall,AHKSetup\setup_template.ahk, % label11 . "\AHKSetup\setup_template.ahk",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\short documentation.pdf")
+FileInstall,AHKSetup\short documentation.pdf, % label11 . "\AHKSetup\short documentation.pdf",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\uninstall_template.ahk")
+FileInstall,AHKSetup\uninstall_template.ahk, % label11 . "\AHKSetup\uninstall_template.ahk",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\uninst_start.ahk")
+FileInstall,AHKSetup\uninst_start.ahk, % label11 . "\AHKSetup\uninst_start.ahk",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\lang_packages\DE.lp")
+FileInstall,AHKSetup\lang_packages\DE.lp, % label11 . "\AHKSetup\lang_packages\DE.lp",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\lang_packages\EN.lp")
+FileInstall,AHKSetup\lang_packages\EN.lp, % label11 . "\AHKSetup\lang_packages\EN.lp",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\res\buttonbg.png")
+FileInstall,AHKSetup\res\buttonbg.png, % label11 . "\AHKSetup\res\buttonbg.png",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\AHKSetup\res\Thumbs.db")
+FileInstall,AHKSetup\res\Thumbs.db, % label11 . "\AHKSetup\res\Thumbs.db",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en\Index.html")
+FileInstall,Help\en\Index.html, % label11 . "\Help\en\Index.html",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en\Menu.html")
+FileInstall,Help\en\Menu.html, % label11 . "\Help\en\Menu.html",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en\Menus.html")
+FileInstall,Help\en\Menus.html, % label11 . "\Help\en\Menus.html",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en\Quick Start.html")
+FileInstall,Help\en\Quick Start.html, % label11 . "\Help\en\Quick Start.html",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en\Welcome.html")
+FileInstall,Help\en\Welcome.html, % label11 . "\Help\en\Welcome.html",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Icons\Base Frame.ico")
+FileInstall,Icons\Base Frame.ico, % label11 . "\Icons\Base Frame.ico",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Icons\Translator.ico")
+FileInstall,Icons\Translator.ico, % label11 . "\Icons\Translator.ico",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Icons\Update Checker.ico")
+FileInstall,Icons\Update Checker.ico, % label11 . "\Icons\Update Checker.ico",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\language\de.ini")
+FileInstall,language\de.ini, % label11 . "\language\de.ini",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\language\en.ini")
+FileInstall,language\en.ini, % label11 . "\language\en.ini",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\language\Translation Tool.exe")
+FileInstall,language\Translation Tool.exe, % label11 . "\language\Translation Tool.exe",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Licenses\gnu_gpl_DE.txt")
+FileInstall,Licenses\gnu_gpl_DE.txt, % label11 . "\Licenses\gnu_gpl_DE.txt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Licenses\gnu_gpl_EN.txt")
+FileInstall,Licenses\gnu_gpl_EN.txt, % label11 . "\Licenses\gnu_gpl_EN.txt",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Templates\Before Code.ahk")
+FileInstall,Templates\Before Code.ahk, % label11 . "\Templates\Before Code.ahk",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Templates\Update Checker.ahk")
+FileInstall,Templates\Update Checker.ahk, % label11 . "\Templates\Update Checker.ahk",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Uninstall.exe")
+FileInstall,Uninstall.exe, % label11 . "\Uninstall.exe",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+if (SetupTypeNormal) {
+log("Registry...")
+AppKey := "SOFTWARE\Base Frame"
+UninstallKey := "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Base Frame"
+AppPathKey := "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\Base Frame.exe"
+SetRegView % (A_Is64bitOS ? 64 : 32)
+RegWrite REG_SZ, HKLM, %AppKey%, InstallDir, %label11%
+RegWrite REG_SZ, HKLM, %AppKey%, Version, %CONST_SETUP_APPVERSION%
+RegWrite REG_SZ, HKLM, %UninstallKey%, DisplayName, %CONST_SETUP_TITLE%
+RegWrite REG_SZ, HKLM, %UninstallKey%, UninstallString, "%label11%\Uninstall.exe"
+RegWrite REG_SZ, HKLM, %UninstallKey%, DisplayIcon, "%label11%\Base Frame.exe"
+RegWrite REG_SZ, HKLM, %UninstallKey%, DisplayVersion, %CONST_SETUP_APPVERSION%
+RegWrite REG_SZ, HKLM, %UninstallKey%, URLInfoAbout, %CONST_SETUP_APPWEBSITE%
+RegWrite REG_SZ, HKLM, %UninstallKey%, Publisher, %CONST_SETUP_APPAUTHORNAME%
+RegWrite REG_DWORD, HKLM, %UninstallKey%, NoModify, 1
+RegWrite REG_SZ, HKLM, %AppPathKey%,, %label11%\Base Frame.exe
+}
+instr_count++
+progress := 100
+prog(progress)
+GuiControl,, label15, %progress% `%
+------------------------------
+processing:
+adding setup_template...
+instructions to file...
+license to file...
+changelog to file...
+adding uninstaller:
+generating Uninstall.exe from template...
+compiling uninstaller...
+adding uninstall starter...
+compiling setup... (0)
+build completed! Setup file saved as: C:\Users\Paul\Documents\GitHub\Base-Frame-for-AutoHotKey\Base Frame Setup.exe
+removing temporary files...
+---
+build.exe is terminated

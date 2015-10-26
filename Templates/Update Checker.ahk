@@ -11,9 +11,8 @@ modus=%1% ;Parameter in Variable. It may be "silent"
 
 ;Prepare some variables. They will be set during code generation
 AppVersion=_AppVersion_
-AppVersionForComparison=_AppVersionForComparison_
+AppUpdateVersion=_AppUpdateVersion_
 AppName=_AppName_
-AppNameLong=_AppNameLong_
 AppFileNameNoExt=_AppFileNameNoExt_
 AppURLVersionComparison1:="_AppURLVersionComparison_"
 AppURLVersionComparison2:="_AppURLVersionComparison2_"
@@ -112,11 +111,11 @@ if TempGreatestAvailableVersion=0
 
 FileDelete,%A_WorkingDir%\Online version.txt ;Delete this file because it is not needed anymore
 
-If(TempGreatestAvailableVersion>AppVersionForComparison) ;If the avialable version is greater than the current
+If(TempGreatestAvailableVersion>AppUpdateVersion) ;If the avialable version is greater than the current
 {
 
 	
-	MsgBox, 68, % lang("Update Checker for %1%",AppName),% lang("A new version is avialable!") ".`n" lang("Do you want to download it?") "`n`n" lang("Installed version") ": " AppVersionForComparison "`n" lang("Available version") ": " TempGreatestAvailableVersion
+	MsgBox, 68, % lang("Update Checker for %1%",AppName),% lang("A new version is avialable!") ".`n" lang("Do you want to download it?") "`n`n" lang("Installed version") ": " AppUpdateVersion "`n" lang("Available version") ": " TempGreatestAvailableVersion
 	
 	IfMsgBox,yes ;If user agree
 	{		
@@ -166,7 +165,7 @@ Else ;If no new version is available
 {
 	
 	if modus!=silent ;If silent do not show anything
-		MsgBox, 0,% lang("Update Checker for %1%",AppName),% lang("No new version available.") "`n" lang("Current version") ": " AppVersionForComparison
+		MsgBox, 0,% lang("Update Checker for %1%",AppName),% lang("No new version available.") "`n" lang("Current version") ": " AppUpdateVersion
 	
 }
 

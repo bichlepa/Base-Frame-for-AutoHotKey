@@ -1,0 +1,4 @@
+﻿3.00.00
+Major update!
+New installer, which can make an ordinary install with start menu shortcuts and registry entries
+Many other changes

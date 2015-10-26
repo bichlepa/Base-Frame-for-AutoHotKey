@@ -5,67 +5,89 @@ Generate:
 
 Gui, Submit, NoHide ;Get the entries from GUI
 ;Check again whether the needed entries are set
-If (Source = "" or AppName = "" or AppNameShort = "" or AppNameLong = "" or AppFolder = "" or AppAuthorName = "" or AppAuthorEmail = "" or AppVersion = "" or AppVersionForComparison = "" or AppURLVersionComparison = "")
+If (Source = "" or AppName = "" or AppStdInstal = "" or AppStartMenu = "" or AppID = "" or AppVersion = "" or AppUpdateVersion = "" or (AppURLVersionComparison = "" and AppIncludeUpdater = 1))
    Return
 
 gui,hide ;Gui hide
 
 SetTimer, Check, off ;set timer off
 
-;Get installtion language ;TODO: It should be possible to select language during installation
-AppInstallationLanguage:=%uilang%enlangname
-;Get application license ; TODO: It should be possible to select the license
-AppLicense=GPL
+
+
+
 ;Read License file
-FileRead,LicenseShort,Licenses\GPL %AppInstallationLanguage% short.txt
 
-;Set output direction (not useful yet)
-OutputDirection=%App_Direction%
+
+;Set output direction
+NameOfTempFolder=Base Frame temp
+OutputDirection=%App_Direction%\%NameOfTempFolder%
+FileRemoveDir,%OutputDirection%,1 ;Delete folder
 FileCreateDir,%OutputDirection% ;Create folder
-FileDelete, %OutputDirection%\%App_FilenameNoExt% modified.ahk ;Delete old file
+;~ FileDelete, %App_Direction%\%App_FilenameNoExt% modified.ahk ;Delete old file
 
+;Copy license file if a default one will be used
+if AppOptionWhichLicense=1
+{
+   filecopy,Licenses\%AppLicense%_%AppLanguage%.txt,AHKSetup\LicenseForCurrentBuild.txt,1 ;copy license
+}
+else
+{
+   if DllCall("Shlwapi.dll\PathIsRelative","Str",AppCustomLicensePath)
+   {
+      filecopy,% App_Direction "\" AppCustomLicensePath,AHKSetup\LicenseForCurrentBuild.txt,1 ;copy license 
+   }      
+   else
+   {
+      filecopy,% AppCustomLicensePath,AHKSetup\LicenseForCurrentBuild.txt,1 ;copy license  
+   }
 
-filecopy,Licenses\%AppLicense% %AppInstallationLanguage%.txt,%OutputDirection%\License.txt,1 ;copy license
-
+}
 
 
 
 
 ;Save settings of that script
 
-iniwrite,%AppName%,%App_Direction%\Settings.ini,BaseFrame,Appname
-iniwrite,%AppNameShort%,%App_Direction%\Settings.ini,BaseFrame,AppNameShort
-iniwrite,%AppNameLong%,%App_Direction%\Settings.ini,BaseFrame,AppNameLong
-iniwrite,%AppFolder%,%App_Direction%\Settings.ini,BaseFrame,AppOrdner
-iniwrite,%AppAuthorName%,%App_Direction%\Settings.ini,BaseFrame,AppAuthorName
-iniwrite,%AppAuthorEmail%,%App_Direction%\Settings.ini,BaseFrame,AppAuthorEmail
-iniwrite,%AppVersion%,%App_Direction%\Settings.ini,BaseFrame,AppVersion
-iniwrite,%AppVersionForComparison%,%App_Direction%\Settings.ini,BaseFrame,AppGenaueVersion
-iniwrite,%AppURLVersionComparison%,%App_Direction%\Settings.ini,BaseFrame,AppUrlTxtVersion
-iniwrite,%AppURLVersionComparison2%,%App_Direction%\Settings.ini,BaseFrame,AppUrlTxtVersion2
-iniwrite,%AppURLVersionComparison3%,%App_Direction%\Settings.ini,BaseFrame,AppUrlTxtVersion3
-iniwrite,%AppChangeLog%,%App_Direction%\Settings.ini,BaseFrame,AppChangelog
-iniwrite,%AppInstallationLanguage%,%App_Direction%\Settings.ini,BaseFrame,AppInstallationLanguage
-iniwrite,%AppLicense%,%App_Direction%\Settings.ini,BaseFrame,AppLicense
+iniwrite,%AppName%,%App_Direction%\AppInfo.ini,AppInfo,Appname
+iniwrite,%AppStdInstal%,%App_Direction%\AppInfo.ini,AppInfo,AppStdInstall
+iniwrite,%AppStartMenu%,%App_Direction%\AppInfo.ini,AppInfo,AppStartMenu
+iniwrite,%AppID%,%App_Direction%\AppInfo.ini,AppInfo,AppID
+iniwrite,%AppAuthorName%,%App_Direction%\AppInfo.ini,AppInfo,AppAuthorName
+iniwrite,%AppAuthorEmail%,%App_Direction%\AppInfo.ini,AppInfo,AppAuthorEmail
+iniwrite,%AppVersion%,%App_Direction%\AppInfo.ini,AppInfo,AppVersion
+iniwrite,%AppUpdateVersion%,%App_Direction%\AppInfo.ini,AppInfo,AppUpdateVersion
 
-iniwrite,%AppDirList%,%App_Direction%\Settings.ini,BaseFrame,AppDirList
-iniwrite,%AppFileList%,%App_Direction%\Settings.ini,BaseFrame,AppFileList
-iniwrite,%AppExeList%,%App_Direction%\Settings.ini,BaseFrame,AppExeList
-iniwrite,%AppIconList%,%App_Direction%\Settings.ini,BaseFrame,AppIconList
+iniwrite,%AppIncludeUpdater%,%App_Direction%\AppInfo.ini,AppInfo,AppIncludeUpdater
+iniwrite,%AppOptionCheckForUpdatesOnStartup%,%App_Direction%\AppInfo.ini,AppInfo,AppOptionCheckForUpdatesOnStartup
+iniwrite,%AppURLVersionComparison%,%App_Direction%\AppInfo.ini,AppInfo,AppUrlTxtVersion
+iniwrite,%AppURLVersionComparison2%,%App_Direction%\AppInfo.ini,AppInfo,AppUrlTxtVersion2
+iniwrite,%AppURLVersionComparison3%,%App_Direction%\AppInfo.ini,AppInfo,AppUrlTxtVersion3
+iniwrite,%AppCreateIniWithUpdateInformations%,%App_Direction%\AppInfo.ini,AppInfo,AppCreateIniWithUpdateInformations
+iniwrite,%AppPathOfIniWithUpdateInformations%,%App_Direction%\AppInfo.ini,AppInfo,AppPathOfIniWithUpdateInformations
+iniwrite,%AppURLInstaller%,%App_Direction%\AppInfo.ini,AppInfo,AppURLInstaller
+iniwrite,%AppWebsite%,%App_Direction%\AppInfo.ini,AppInfo,AppWebsite
+
+iniwrite,%AppChangelog%,%App_Direction%\AppInfo.ini,AppInfo,AppChangeLog
+
+iniwrite,%AppOptionWhichLicense%,%App_Direction%\AppInfo.ini,AppInfo,AppOptionWhichLicense
+iniwrite,%AppCustomLicensePath%,%App_Direction%\AppInfo.ini,AppInfo,AppCustomLicensePath
+iniwrite,%AppLicense%,%App_Direction%\AppInfo.ini,AppInfo,AppLicense
+
+iniwrite,%AppLanguage%,%App_Direction%\AppInfo.ini,AppInfo,AppLanguage
+iniwrite,% AppPortability -1,%App_Direction%\AppInfo.ini,AppInfo,AppPortability
+
+iniwrite,%AppDirList%,%App_Direction%\AppInfo.ini,AppInfo,AppDirList
+iniwrite,%AppFileList%,%App_Direction%\AppInfo.ini,AppInfo,AppFileList
+iniwrite,%AppExeList%,%App_Direction%\AppInfo.ini,AppInfo,AppExeList
+iniwrite,%AppIconList%,%App_Direction%\AppInfo.ini,AppInfo,AppIconList
 
 
 
 ;---Create the main application ahk---
-; The code needs to be modified. In the beginning some new lines of code are added
-
+; The code of the main programm will be modified. In the beginning some new lines of code are added
 
 
 FileRead, Code, %File% ;Read code from main ahk
-
-stringreplace,Code,Code,BaseFrame_About: ;Remove the label if it is present. This label is present in the %Template_BeforeCode% 
-;This label is made in order to allow the user to use the About window.
-
-
 
 
 ;In the very beginning add the template
@@ -77,12 +99,17 @@ Code_MainScript=
 
 
 ;Replace some placeholders according to the settings
-stringreplace,Code_MainScript,Code_MainScript,_BASEFRAMEABOUTTEXT_,%LicenseShort%,a
-stringreplace,Code_MainScript,Code_MainScript,_AppAuthorName_,%AppAuthorName%,a
-stringreplace,Code_MainScript,Code_MainScript,_AppAuthorEmail_,%AppAuthorEmail%,a
-stringreplace,Code_MainScript,Code_MainScript,_AppNameLong_,%AppNameLong%,a
-stringreplace,Code_MainScript,Code_MainScript,_AppVersionForComparison_,%AppVersionForComparison%,a
+stringreplace,Code_MainScript,Code_MainScript,_BASEFRAMEABOUTTEXT_,%LicenseShort%,a ;TODO
+stringreplace,Code_MainScript,Code_MainScript,_AppUpdateVersion_,%AppUpdateVersion%,a
 stringreplace,Code_MainScript,Code_MainScript,_AppVersion_,%AppVersion%,a
+if (AppIncludeUpdater and (AppOptionCheckForUpdatesOnStartup=1 or AppOptionCheckForUpdatesOnStartup=3))
+   stringreplace,Code_MainScript,Code_MainScript,_AppCheckForUpates_,true,a
+else
+   stringreplace,Code_MainScript,Code_MainScript,_AppCheckForUpates_,false,a
+if (AppIncludeUpdater=1 and AppOptionCheckForUpdatesOnStartup=3)
+   stringreplace,Code_MainScript,Code_MainScript,_AppCheckForUpatesReadIni_,true,a
+else
+   stringreplace,Code_MainScript,Code_MainScript,_AppCheckForUpatesReadIni_,false,a
 ;~ MsgBox %Code_MainScript%
 
 ;Now also add the normal code
@@ -94,248 +121,71 @@ Code_MainScript=
 )
 
 ;Write modified code to file
-fileappend,%Code_MainScript%,%OutputDirection%\%App_FilenameNoExt% modified.ahk,utf-8
+FileDelete,%App_Direction%\%App_FilenameNoExt%_modified.ahk
+fileappend,%Code_MainScript%,%App_Direction%\%App_FilenameNoExt%_modified.ahk,utf-8
 
 
 
 
 
 ;---Create Update Checker.ahk.
-
-FileDelete, %OutputDirection%\Update Checker.ahk ; Delete old file
-FileRead,Code_UpdateChecker,Templates\Update Checker.ahk ;Read template file
-
-;Add translations
-;TODO allow multiple translations. Here is only the current UI language
-Code_Translation:=GenerateTranslationString(Code_UpdateChecker,UILang)
-
-;MsgBox %Code_Translation%
-
-StringReplace,Code_UpdateChecker,Code_UpdateChecker,_Translations_in_Lang_function_,%Code_Translation%
-
-;Replace some placeholders
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppUILang_,%uilang% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppVersion_,%AppVersion% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppVersionForComparison_,%AppVersionForComparison% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppName_,%AppName% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppNameLong_,%AppNameLong% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppFileNameNoExt_,%App_FilenameNoExt% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison_,%AppURLVersionComparison% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison2_,%AppURLVersionComparison2% ,a
-stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison3_,%AppURLVersionComparison3% ,a
-FileAppend, %Code_UpdateChecker%, %OutputDirection%\Update Checker.ahk,utf-8 ;Write file
-
-
-
-
-
-
-;---Create installation file---
-filedelete,%OutputDirection%\%App_FilenameNoExt% Installation.ahk ;Delete old file
-FileRead,Code_Installer,Templates\App Installation.ahk ;Read template file
-
-tempTextTheFileMayBeOpened:=lang("The File may be opened")
-tempTextError:=lang("Error")
-;Code generation: Loop through content of %AppFileList% and create the code for the installer
-fcounter := 0
-loop,parse,AppDirList,|
+if AppIncludeUpdater
 {
-       
-   if A_loopfield
-   {
-      fcounter++
-      tempTextCreateFolderXY:=lang("Creating folder %1%",A_loopfield)
-      tempTextFolderXYCouldNotBeCreated:=lang("Folder %1% could not be created",A_loopfield)
-      InstallerCodeForFolders=
-      (
-      %InstallerCodeForFolders%
-      FolderNumber%A_index%:
-      Gui, Submit, NoHide
-      GuiControl,, Log, [%fcounter%/`%fcounter`%] %tempTextCreateFolderXY%...``n`%Log`%
-      filecreatedir,`%a_workingdir`%\%A_loopfield%
-      if errorlevel=1
-      {
-          GuiControl,, Log, [%tempTextError%] %tempTextFolderXYCouldNotBeCreated%.``n`%Log`% 
-          MsgBox, 6, %AppNameLong% v%AppVersion% Installer, %tempTextFolderXYCouldNotBeCreated%.
-          ifmsgbox TryAgain
-          {
-              goto FolderNumber%A_index%
-          }
-          ifmsgbox Cancel
-              exitapp
-      }
-      prc := Round(100 * (%fcounter%/fcounter))
-      GuiControl,, Progress, `%prc`%
-      GuiControl,, Percent, `%prc`%```%
-      
-      )
-      
-   }
+   ;~ FileDelete, %OutputDirection%\Update Checker.ahk ; Delete old file
+   FileRead,Code_UpdateChecker,Templates\Update Checker.ahk ;Read template file
 
+   ;Add translations
+   ;TODO allow multiple translations.
+   Code_Translation:=GenerateTranslationString(Code_UpdateChecker,AppLanguage)
+   ;MsgBox %Code_Translation%
+   StringReplace,Code_UpdateChecker,Code_UpdateChecker,_Translations_in_Lang_function_,%Code_Translation%
+
+   ;Replace some placeholders
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppUILang_,%AppLanguage% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppVersion_,%AppVersion% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppUpdateVersion_,%AppUpdateVersion% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppName_,%AppName% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppFileNameNoExt_,%App_FilenameNoExt% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison_,%AppURLVersionComparison% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison2_,%AppURLVersionComparison2% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison3_,%AppURLVersionComparison3% ,a
+   ;Write file
+   FileAppend, %Code_UpdateChecker%, %OutputDirection%\Update Checker.ahk,utf-8
 }
 
-;Code generation: Loop through content of %AppFileList% and create the code for the installer 
-loop,parse,AppFileList,|
+
+;Copy appinfo.ini to the temporary path. The build.exe needs it.
+FileCopy,%App_Direction%\AppInfo.ini,%OutputDirection%\AppInfo.ini
+
+;Copy changelog file to the temporary path.
+if (fileexist(App_Direction "\" AppChangelog) and AppChangelog!="")
 {
-   
-   if A_loopfield
-   {
-      fcounter++
-      tempTextExtractFileXY:=lang("Extracting file %1%",A_loopfield)
-      tempTextFileXYCouldNotBeExtracted:=lang("File %1% could not be extracted",A_loopfield)
-      InstallerCodeForFiles=
-      (
-      %InstallerCodeForFiles%
-      FileNumber%A_index%:
-      Gui, Submit, NoHide
-      GuiControl,, Log, [%fcounter%/`%fcounter`%] %tempTextExtractFileXY%...``n`%Log`%
-      FileInstall,%A_loopfield%,`%a_workingdir`%\%A_loopfield%,1
-      if errorlevel=1
-      {
-          GuiControl,, Log, [%tempTextError%] %tempTextFileXYCouldNotBeExtracted%.``n`%Log`% 
-          MsgBox, 6, %AppNameLong% v%AppVersion% Installer, %tempTextFileXYCouldNotBeExtracted%. %tempTextTheFileMayBeOpened%.
-          ifmsgbox TryAgain 
-          {
-              goto FileNumber%A_index%
-          }
-          ifmsgbox Cancel
-              exitapp
-      }
-      prc := Round(100 * (%fcounter%/fcounter))
-      GuiControl,, Progress, `%prc`%
-      GuiControl,, Percent, `%prc`%```%
-      
-      )
-   }
-
+   FileRead,AppChangelogText,%App_Direction%\%AppChangelog%
+   FileCopy,%App_Direction%\%AppChangelog%,%OutputDirection%\%AppChangelog%
 }
-
-;Code generation: Add Licese.txt:
-fcounter++
-tempTextExtractFileXY:=lang("Extracting file %1%","License.txt")
-tempTextFileXYCouldNotBeExtracted:=lang("File %1% could not be extracted","License.txt")
-
-InstallerCodeForFiles=
-(
-%InstallerCodeForFiles%
-ExtractLicenseFIle:
-Gui, Submit, NoHide
-GuiControl,, Log, [%fcounter%/`%fcounter`%] %tempTextExtractFileXY%...``n`%Log`%
-FileInstall,License.txt,`%a_workingdir`%\License.txt,1
-if errorlevel=1
-{
-	GuiControl,, Log, [Fehler] %tempTextFileXYCouldNotBeExtracted%.``n`%Log`% 
-	MsgBox, 6, %AppNameLong% v%AppVersion% Installer, %tempTextFileXYCouldNotBeExtracted%. %tempTextTheFileMayBeOpened%.
-	ifmsgbox TryAgain 
-	{
-	  goto ExtractLicenseFIle
-	}
-	ifmsgbox Cancel
-		exitapp
-}
-prc := Round(100 * (%fcounter%/fcounter))
-GuiControl,, Progress, `%prc`%
-GuiControl,, Percent, `%prc`%```%
-
-)
-
-;Code generation: Code for exe files that will be included after compilation
-loop,parse,AppExeList,|
-{
-   
-   if A_loopfield
-   {
-      fcounter++
-      tempTextExtractFileXY:=lang("Extracting file %1%",A_loopfield ".exe")
-      tempTextFileXYCouldNotBeExtracted:=lang("File %1% could not be extracted",A_loopfield ".exe")
-      
-      InstallerCodeForFiles=
-      (
-      %InstallerCodeForFiles%
-      ExeNr%A_index%:
-      Gui, Submit, NoHide
-      GuiControl,, Log, [%fcounter%/`%fcounter`%] %tempTextExtractFileXY%...``n`%Log`%
-      FileInstall,%A_loopfield%.exe,`%a_workingdir`%\%A_loopfield%.exe,1
-      if errorlevel=1
-      {
-          GuiControl,, Log, [Fehler] %tempTextFileXYCouldNotBeExtracted%.``n`%Log`%
-          MsgBox, 6, %AppNameLong% v%AppVersion% Installer, %tempTextFileXYCouldNotBeExtracted%. %tempTextTheFileMayBeOpened%.
-          ifmsgbox TryAgain 
-          {
-              goto ExeNr%A_index%
-          }
-          ifmsgbox Cancel
-              exitapp
-      }
-      prc := Round(100 * (%fcounter%/fcounter))
-      GuiControl,, Progress, `%prc`%
-      GuiControl,, Percent, `%prc`%```%
-      
-      )
-   }
-
-}
-
-;Code generation: GUI for installation status
-tempTextDetails:=lang("Details")
-tempTextInstallationStarted:=lang("Installation started")
-tempTextInstaller:=lang("Installer")
-InstallerCodeForInstallationGUI=
-(
-fcounter=%fcounter%
-Gui -Caption +Border
-Gui, Add, Progress, vProgress x10 y10 h15 w350 +Border c0000AA, 0
-Gui, Add, Text, x10 y35, %tempTextDetails%:
-Gui, Add, Text, x320 y35 w50 vPercent, 0```%
-Gui, Add, Edit, vLog x10 y55 h75 w350 ReadOnly, %tempTextInstallationStarted%...
-Gui, Show, w370 h140, %AppNameLong% v%AppVersion% %tempTextInstaller%
-)
-
-
-
-
-
-;Assemble the script
-stringreplace,Code_Installer,Code_Installer,_AppShortLicenseDescription_,%ApShortLicenseDescription% ,a
-stringreplace,Code_Installer,Code_Installer,_InstallFolders_,%InstallerCodeForFolders% ,a
-stringreplace,Code_Installer,Code_Installer,_InstallFiles_,%InstallerCodeForFiles%,a
-stringreplace,Code_Installer,Code_Installer,_GuiInstallationsStatus_,%InstallerCodeForInstallationGUI%
-
-
-;Add translations
-;TODO allow multiple translations. Here is only the current UI language
-Code_Translation:=GenerateTranslationString(Code_Installer,UILang)
-
-;MsgBox %Code_Translation%
-
-StringReplace,Code_Installer,Code_Installer,_Translations_in_Lang_function_,%Code_Translation%
-
-stringreplace,Code_Installer,Code_Installer,_BASEFRAMEABOUTTEXT_,%LicenseShort%,a
-stringreplace,Code_Installer,Code_Installer,_AppUILang_,%uilang% ,a
-stringreplace,Code_Installer,Code_Installer,_AppFileName_,%App_FilenameNoExt% ,a
-stringreplace,Code_Installer,Code_Installer,_AppFolder_,%AppFolder% ,a
-stringreplace,Code_Installer,Code_Installer,_AppNameLong_,%AppNameLong% ,a
-stringreplace,Code_Installer,Code_Installer,_AppName_,%AppName% ,a
-stringreplace,Code_Installer,Code_Installer,_AppVersion_,%AppVersion% ,a
-stringreplace,Code_Installer,Code_Installer,_AppAuthorName_,%AppAuthorName% ,a
-stringreplace,Code_Installer,Code_Installer,_AppAuthorEmail_,%AppAuthorEmail% ,a
-stringreplace,Code_Installer,Code_Installer,_AppVersionForComparison_,%AppVersionForComparison% ,a
-stringreplace,Code_Installer,Code_Installer,_AppChangelog_,%AppChangeLog% ,a
-stringreplace,Code_Installer,Code_Installer,_AppLicense_,%AppLicense% ,a
-stringreplace,Code_Installer,Code_Installer,_AppInstallationLanguage_,%ApInstallationLanguage% ,a
-
-
-FileAppend, %Code_Installer%, %OutputDirection%\%App_FilenameNoExt% Installation.ahk,utf-8
-
-
-
 
 ;---Find out the path of the compiler---
 SplitPath, A_AhkPath,,AHK_COMPILERdir
 AHK_COMPILER := AHK_COMPILERdir "\Compiler\Ahk2Exe.exe"
 
 
+;Create all folders in the temporary path
+Loop,parse,AppDirList,|
+{
+   if a_loopfield ;Make sure, the parameter is not empty
+   {
+      FileCreateDir,%OutputDirection%\%A_LoopField%
+   }
+}
 
+;Copy all files
+Loop,parse,AppFileList,|
+{
+   if a_loopfield ;Make sure, the parameter is not empty
+   {
+      FileCopy,%App_Direction%\%A_LoopField%,%OutputDirection%\%A_LoopField%
+   }
+}
 
 ;---Compile all files---
 Loop,parse,AppExeList,|
@@ -343,13 +193,26 @@ Loop,parse,AppExeList,|
    
    if a_loopfield ;Make sure, the parameter is not empty
    {
-      ;If main application ahk itself will be compiled, leave it untouched
-      If a_loopfield=%AppFileName%
-         ToCompile=%a_loopfield% modified
+      ToCompile=%a_loopfield%
+      
+      ;application ahk and update checker are already in the temporary folder
+      ToCompile_Add:=""
+      If (ToCompile="Update Checker")
+      {
+         SubfolderOfCurrentAHK:=NameOfTempFolder "\"
+      }
+      else If (ToCompile=AppFileName or ToCompile="Update Checker")
+      {
+         ToCompile_Add:="_modified"
+         SubfolderOfCurrentAHK=
+      }
       else
-         ToCompile=%a_loopfield%
-      ;icon Finden
-      IconForThisExe:=FindIconAssignedToExe(a_loopfield)
+      {
+         SubfolderOfCurrentAHK=
+      }
+      
+      ;Find icon
+      IconForThisExe:=FindIconAssignedToExe(ToCompile)
       if IconForThisExe
       {
          ifinstring,IconForThisExe,:
@@ -359,11 +222,11 @@ Loop,parse,AppExeList,|
       }
       
       
-      ;MsgBox %IconForThisExe% 
+      ;Compile the ahk to exe
       TryAgainToCompileExe:
       SplashTexton,200,60,% lang("In progress"),%  lang("Compile %1%", ToCompile) 
       process,close,Ahk2Exe.exe ;If compiler is running, close ist
-      run,%AHK_COMPILER% /in "%OutputDirection%\%ToCompile%.ahk" /out "%OutputDirection%\%ToCompile%.exe" %IconForThisExe% ;Call compiler
+      run,%AHK_COMPILER% /in "%App_Direction%\%SubfolderOfCurrentAHK%%ToCompile%%ToCompile_Add%.ahk" /out "%OutputDirection%\%ToCompile%.exe" %IconForThisExe% ;Call compiler
       process,waitclose,Ahk2Exe.exe,10 ;Wait until compiler has finished
       if errorlevel<>0 ;If compiler wont finish
       {
@@ -376,50 +239,44 @@ Loop,parse,AppExeList,|
             goto,TryAgainToCompileExe
       } 
       
+      ;Delete ahk file from temporary folder
+      if (SubfolderOfCurrentAHK=NameOfTempFolder "\")
+      {
+         FileDelete,%App_Direction%\%SubfolderOfCurrentAHK%%ToCompile%.ahk
+      }
       
    }
    
 }
+;~ FileMove,%OutputDirection%\%AppFileName%_modified.exe,%OutputDirection%\%AppFileName%.exe
 
-;Removie the "modified" from the compiled application
-filemove,%OutputDirection%\%AppFileName% modified.exe,%OutputDirection%\%AppFileName%.exe,1 
+;---Create installation file---
 
+;~ SplashTexton,200,60,% lang("In progress"),%  lang("Create installation file") 
+SplashTextOff
 
+q="
+build_source := OutputDirection "\" AppFileName ".exe"
 
-;At last, compile installation file
-IconForThisExe:=FindIconAssignedToExe(AppFileName) ;Find icon
-if IconForThisExe
-{
-   ifinstring,IconForThisExe,:
-      IconForThisExe=/icon "%IconForThisExe%"
-   else
-      IconForThisExe=/icon "%App_Direction%\%IconForThisExe%"
-}
-TryAgainToCompileInstalltionFile:
-SplashTexton,200,60,% lang("In progress"),%  lang("Compile the installation file", ToCompile) 
-process,close,Ahk2Exe.exe ;If compiler is running, close ist
-run,%AHK_COMPILER% /in "%OutputDirection%\%AppFileName% Installation.ahk" /out "%OutputDirection%\%AppFileName% Installation.exe" %IconForThisExe% ;Call compiler
-process,waitclose,Ahk2Exe.exe,10 ;Wait until compiler finishes
-if errorlevel<>0 ;If compiler wont finish
-{
-   SplashTextOff
-   settimer,CheckWhetherCompilerHasFinishedAnyway,100  ;Check regulary whether the compiler finishes anyway
-   MsgBox, 6, % lang("Attention"), % lang("The compiler needs very long to compile %1%.",ToCompile)
-   ifmsgbox,Cancel
-      ExitApp
-   IfMsgBox, tryagain
-      goto,TryAgainToCompileInstalltionFile
-}
+build_license := A_ScriptDir "\AHKSetup\LicenseForCurrentBuild.txt"
+
+build_dest := App_Direction "\" AppFileName " Setup.exe" 
+build_lang := AppLanguage
+build_single := ""
+
+build_cmd := "AHKSetup\build.exe " . q . build_source . q . " " . ((build_license == "-gnu_gpl") ? "" : "-li ") . q . build_license . q . " " . ((build_dest == "") ? "" : "-d ") . q . build_dest . q . " " . ((build_lang == "") ? "" : "-lang ") . q . build_lang . q . " " . q . build_single . q
+;~ MsgBox %build_cmd%
+RunWait, %comspec% /c " %build_cmd% && exit",,max
+
+;~ run,AHKSetup\log.txt
+
 
 ;~ Gui, Submit, NoHide
 If not CheckboxKeepRemainingFiles ;If the temporary file should be deleted
 {
 	;Delete temporary files
-    FileDelete, %OutputDirection%\Update Checker.ahk
-	FileDelete, %OutputDirection%\Update Checker.exe
-	FileDelete, %OutputDirection%\%App_FilenameNoExt% Installation.ahk
-	FileDelete, %OutputDirection%\%App_FilenameNoExt% modified.ahk 
-	FileDelete, %OutputDirection%\%App_FilenameNoExt%.exe
+    FileDelete,% App_Direction "\" AppFileName "_modified.exe" 
+	FileRemoveDir, %OutputDirection%,1
 }
 
 splashtextoff
@@ -431,6 +288,32 @@ splashtextoff
 
 ;When ready
 ToolTip
+
+;Create ini file with update informations (if chosen)
+if (AppCreateIniWithUpdateInformations and AppPathOfIniWithUpdateInformations!="")
+{
+   if DllCall("Shlwapi.dll\PathIsRelative","Str",AppCustomLicensePath)
+      tempIniPath:=App_Direction "\" AppPathOfIniWithUpdateInformations
+   else
+      tempIniPath:=AppPathOfIniWithUpdateInformations
+   FileDelete,%tempIniPath%
+   FileAppend,[Update Info]`n,%tempIniPath%,UTF-16
+   
+   iniwrite,%AppUpdateVersion%,%tempIniPath%,Update Info,Version
+   if (AppURLInstaller!="")
+      iniwrite,%AppURLInstaller%,%tempIniPath%,Update Info,Download Path
+   if (AppWebsite!="")
+      iniwrite,%AppWebsite%,%tempIniPath%,Update Info,Open Site
+   if (AppChangeLogText!="")
+   {
+      StringReplace,AppChangelogTextToINI,AppChangeLogText,`n,↓,all
+      StringReplace,AppChangelogTextToINI,AppChangelogTextToINI,`t,→,all
+      StringReplace,AppChangelogTextToINI,AppChangelogTextToINI,`r,,all
+      iniwrite,%AppChangelogTextToINI%,%tempIniPath%,Update Info,Changelog
+   }
+}
+
+;Create shortcut in the sourcecode path if user wants
 if 1!=FastCompile ;Do not show the message box, if it was called by the shortcut
 {
    MsgBox, 4, % lang("Finished"), % lang("Base Frame was appended to %1%.",AppName) "`n" lang("Do you want to create a shortcut for faster compilation?") 
@@ -454,12 +337,12 @@ return
 jumpOverGenerateRoutines:
 temp=
 
-GenerateTranslationString(ahkFileContent,WhitchLanguage)
+GenerateTranslationString(ahkFileContent,WhichLanguage)
 {
    ;Change uilang temporary
    global UILang
    tempoldUILang:=UILang
-   UILang:=WhitchLanguage
+   UILang:=WhichLanguage
    
    
    tempFoundPos=1
@@ -494,7 +377,7 @@ GenerateTranslationString(ahkFileContent,WhitchLanguage)
    ;Add an if statement
    returnCode=
    (
-   if (UILang="%WhitchLanguage%")
+   if (UILang="%WhichLanguage%")
    {
       %returnCode%
    }
