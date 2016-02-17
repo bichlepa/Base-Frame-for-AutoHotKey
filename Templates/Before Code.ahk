@@ -20,14 +20,21 @@ if (_AppCheckForUpates_)
 	}
 	else
 		BaseFrame_CheckedForUpdate:=true
-	
+
 	if (BaseFrame_CheckedForUpdate=true) ;If it should search for updates
 	{
+		
 		try
-			run, Update Checker.exe "silent" ;Try to call update checker. It should not show anything until an update was found.
+		{
+			run, %a_scriptdir%\Update Checker.exe "silent" ;Try to call update checker. It should not show anything until an update was found.
+			BaseFrame_CheckedForUpdate:=1
+		}
 		catch
 			BaseFrame_CheckedForUpdate:=-1
 	}
+	else
+		BaseFrame_CheckedForUpdate:=0
 }
-
+else
+	BaseFrame_CheckedForUpdate:=0
 ;Here the user code will start

@@ -149,6 +149,7 @@ if AppIncludeUpdater
    stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison_,%AppURLVersionComparison% ,a
    stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison2_,%AppURLVersionComparison2% ,a
    stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppURLVersionComparison3_,%AppURLVersionComparison3% ,a
+   stringreplace,Code_UpdateChecker,Code_UpdateChecker,_AppWebsite_,%AppWebsite% ,a
    ;Write file
    FileAppend, %Code_UpdateChecker%, %OutputDirection%\Update Checker.ahk,utf-8
 }
@@ -275,7 +276,7 @@ RunWait, %comspec% /c " %build_cmd% && exit",,max
 If not CheckboxKeepRemainingFiles ;If the temporary file should be deleted
 {
 	;Delete temporary files
-    FileDelete,% App_Direction "\" AppFileName "_modified.exe" 
+    FileDelete,% App_Direction "\" AppFileName "_modified.ahk" 
 	FileRemoveDir, %OutputDirection%,1
 }
 

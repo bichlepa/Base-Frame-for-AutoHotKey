@@ -4,7 +4,7 @@ Application Info:
 AppName=Base Frame
 AppID=Base Frame
 AppVersion=3 BETA
-AppUpdateVersion=3.00.00
+AppUpdateVersion=3.01.00
 AppAuthorName=Paul Bichler
 AppAuthorEmailAvailable=1
 AppAuthorEmail=autohotflow@arcor.de
@@ -14,12 +14,12 @@ AppPortability=2
 AppChangelogAvailable=1
 AppChangelog=Changelog.txt
 AppWebsiteAvailable=1
-AppWebsite=http://ahkscript.org/boards/viewtopic.php?f=6&t=6723
+AppWebsite=http://www.autohotkey.com/boards/viewtopic.php?f=6&t=6723
 AppUsesFileTypes=0
 creating environment:
 copying files...
-creating AppUninstFiles: 'uninstf175568609'
-creating AppUninstReg: 'uninstr175568609'
+creating AppUninstFiles: 'uninstf1680468'
+creating AppUninstReg: 'uninstr1680468'
 writing instruction file 1/2...
 generating instructions from directory structure of C:\Users\Paul\Documents\GitHub\Base-Frame-for-AutoHotKey\Base Frame temp:
 0: AHKSetup
@@ -35,25 +35,25 @@ generating instructions from files inside C:\Users\Paul\Documents\GitHub\Base-Fr
 9: AppInfo.ini
 10: Base Frame.exe
 11: Changelog.txt
-12: TODO.odt
-13: Update Checker.exe
-14: AHKSetup\build.exe
-15: AHKSetup\ChangelogForCurrentBuild.txt
-16: AHKSetup\LicenseForCurrentBuild.txt
-17: AHKSetup\log.txt
-18: AHKSetup\setupicon.ico
-19: AHKSetup\setup_template.ahk
-20: AHKSetup\short documentation.pdf
-21: AHKSetup\uninstall_template.ahk
-22: AHKSetup\uninst_start.ahk
-23: AHKSetup\lang_packages\DE.lp
-24: AHKSetup\lang_packages\EN.lp
-25: AHKSetup\res\buttonbg.png
-26: AHKSetup\res\Thumbs.db
-27: Help\en\Index.html
-28: Help\en\Menu.html
-29: Help\en\Menus.html
-30: Help\en\Quick Start.html
+12: Update Checker.exe
+13: AHKSetup\build.exe
+14: AHKSetup\ChangelogForCurrentBuild.txt
+15: AHKSetup\LicenseForCurrentBuild.txt
+16: AHKSetup\log.txt
+17: AHKSetup\setupicon.ico
+18: AHKSetup\setup_template.ahk
+19: AHKSetup\short documentation.pdf
+20: AHKSetup\uninstall_template.ahk
+21: AHKSetup\uninst_start.ahk
+22: AHKSetup\lang_packages\DE.lp
+23: AHKSetup\lang_packages\EN.lp
+24: AHKSetup\res\buttonbg.png
+25: AHKSetup\res\Thumbs.db
+26: Help\en\Index.html
+27: Help\en\Menu.html
+28: Help\en\Menus.html
+29: Help\en\Quick Start.html
+30: Help\en\Troubleshooting.html
 31: Help\en\Welcome.html
 32: Icons\Base Frame.ico
 33: Icons\Translator.ico
@@ -129,11 +129,6 @@ prog(progress)
 GuiControl,, label15, %progress% `%
 log(label11 . "\Changelog.txt")
 FileInstall,Changelog.txt, % label11 . "\Changelog.txt",1
-instr_count++, progress := floor(100*(instr_count/instr_amount))
-prog(progress)
-GuiControl,, label15, %progress% `%
-log(label11 . "\TODO.odt")
-FileInstall,TODO.odt, % label11 . "\TODO.odt",1
 instr_count++, progress := floor(100*(instr_count/instr_amount))
 prog(progress)
 GuiControl,, label15, %progress% `%
@@ -224,6 +219,11 @@ prog(progress)
 GuiControl,, label15, %progress% `%
 log(label11 . "\Help\en\Quick Start.html")
 FileInstall,Help\en\Quick Start.html, % label11 . "\Help\en\Quick Start.html",1
+instr_count++, progress := floor(100*(instr_count/instr_amount))
+prog(progress)
+GuiControl,, label15, %progress% `%
+log(label11 . "\Help\en\Troubleshooting.html")
+FileInstall,Help\en\Troubleshooting.html, % label11 . "\Help\en\Troubleshooting.html",1
 instr_count++, progress := floor(100*(instr_count/instr_amount))
 prog(progress)
 GuiControl,, label15, %progress% `%
